@@ -1,0 +1,16 @@
+<div style="margin: 30px; font-size: large;">
+    <h1 style="margin-bottom: 40px;">Django / Tesseract / Celery Demo</h1>
+
+    <form enctype="multipart/form-data" action="/tesserdemo/" method="post">
+        {% csrf_token %}
+        <label for="test">File to read:</label>
+        <br>
+        <input style="margin-top:20px;" type="file" name="input_file" value="input_file" id="input_file">
+        <br>
+    <input style="margin-top:20px;" type="submit" value="Perform optical recognition">
+    </form>
+
+    <p>Here's what Tesseract read:</p>
+
+    <p style="padding: 20px;">{{ ocr_result }}</p>
+</div>

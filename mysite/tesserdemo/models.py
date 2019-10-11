@@ -5,7 +5,6 @@ from django.db import models
 class ReadText(models.Model):
     creation_date = models.DateTimeField('date created')
 
-
 class Line(models.Model):
     read_text = models.ForeignKey(ReadText, on_delete=models.CASCADE)
     line_text = models.CharField(max_length=400)

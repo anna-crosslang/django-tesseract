@@ -1,3 +1,0 @@
-worker to start from tesserdemo dir:
-
-celery -A tasks worker --loglevel=info

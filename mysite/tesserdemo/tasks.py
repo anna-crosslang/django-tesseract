@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
-from celery import Celery
-#from celery import app
+#from celery import Celery
+from .celery import app
 
-app = Celery('tasks', backend='rpc://', broker='amqp://anna:regnela8@localhost:5672/myvhost')
+#app = Celery('tasks', backend='rpc://', broker='amqp://anna:regnela8@localhost:5672/myvhost')
 
 @app.task
 def add(x, y):

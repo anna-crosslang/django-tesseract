@@ -5,10 +5,11 @@ from django.conf import settings
 from . import ocr
 from django.core.files.storage import default_storage
 
-#from . import tasks
+from . import tasks
 
 def index(request):
-    #tasks.add.delay(4, 4)
+    result = tasks.add.delay(4, 4)
+    testvar = result.get(timeout=1)
 
     ocr_result = 'No text has been read yet.'
 
@@ -23,7 +24,8 @@ def index(request):
         ocr_result = recognizer.get_result()
 
     context = {
-        'ocr_result': ocr_result
+        'ocr_result': ocr_result,
+        'testvar': testvar
     }
 
     return render(request, 'tesserdemo/index.html', context)

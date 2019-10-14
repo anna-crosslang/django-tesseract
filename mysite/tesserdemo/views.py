@@ -9,7 +9,7 @@ from . import tasks
 
 def index(request):
     result = tasks.add.delay(4, 4)
-    testvar = result.get(timeout=1)
+    testvar = result.get(timeout=10)
 
     ocr_result = 'No text has been read yet.'
 

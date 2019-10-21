@@ -1,18 +1,21 @@
-<div style="margin: 30px; font-size: large;">
-    <h1 style="margin-bottom: 40px;">Django / Tesseract / Celery Demo</h1>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.cs">
 
-    <form enctype="multipart/form-data" action="/tesserdemo/" method="post">
+<div style="margin: 30px; font-size: large;">
+    <h1 style="margin-bottom: 40px;">Django + Tesseract + Celery Demo</h1>
+
+    <form enctype="multipart/form-data" action="/tesserdemo/" method="post" class="form" style="margin-top:70px;">
         {% csrf_token %}
-        <label for="test">File to read:</label>
+        <label for="test">Please choose a file to read:</label>
         <br>
         <input style="margin-top:20px;" type="file" name="input_file" value="input_file" id="input_file">
         <br>
-    <input style="margin-top:20px;" type="submit" value="Perform optical recognition">
+    <input class="btn btn-success btn-lg" style="margin-top:40px;" type="submit" value="Perform OCR">
     </form>
 
-    <p>Here's what Tesseract read:</p>
+    {% if ocr_result %}
+        <p style="margin:50px 0 20px 0;">Here's what Tesseract read:</p>
+        <p style="padding: 20px; border-style: solid;">{{ ocr_result }}</p>
+    {% endif %}
 
-    <p style="padding: 20px;">{{ ocr_result }}</p>
-
-    <p>{{ testvar }}</p>
 </div>

@@ -25,7 +25,7 @@ class OpticalCharacterRecognizer:
             self._config = yaml.safe_load(open(self._config_path))
 
     def optimize_image(self):
-        if hasattr(self, "_image") and hasattr(self, "_config"):
+        if hasattr(self, "_image") and hasattr(self, "_config") and hasattr(self._config, "__len__"):
             if "resize" in self._config:
                 dsize = None
                 if "dsize" in self._config["resize"]:
@@ -59,6 +59,7 @@ class OpticalCharacterRecognizer:
                     if "shape" in self._config["erode"]["kernel"]:
                         erosion_kernel_shape = tuple(self._config["erode"]["kernel"]["shape"])
                 erosion_kernel = np.ones(erosion_kernel_shape, np.uint8)
+                erosion_iterations = 1
                 if "iterations" in self._config["erode"]:
                     erosion_iterations = self._config["erode"]["iterations"]
                 self._image = cv2.erode(self._image, erosion_kernel, iterations=erosion_iterations)
@@ -116,11 +117,11 @@ class OpticalCharacterRecognizer:
                 if "adaptive_method" in self._config["adaptive_threshold"]:
                     adaptive_method = self._config["adaptive_threshold"]["adaptive_method"]
                 adaptive_method_enum_value = getattr(cv2, adaptive_method)
-                threshold_type = "THRESH_BINARY"
+                adaptive_threshold_type = "THRESH_BINARY"
                 if "threshold_type" in self._config["adaptive_threshold"]:
-                    threshold_type = self._config["adaptive_threshold"]["threshold_type"]
-                threshold_type_enum_value = getattr(cv2, threshold_type)
-                block_size = 1
+                    adaptive_threshold_type = self._config["adaptive_threshold"]["threshold_type"]
+                threshold_type_enum_value = getattr(cv2, adaptive_threshold_type)
+                block_size = 3
                 if "block_size" in self._config["adaptive_threshold"]:
                     block_size = self._config["adaptive_threshold"]["block_size"]
                 c = 0
@@ -138,12 +139,14 @@ class OpticalCharacterRecognizer:
     # the temporary file
     def get_result(self):
         text=""
-        if hasattr(self, "_config") and ("language" in self._config):
+        if hasattr(self, "_config") and hasattr(self._config, "__len__") and ("language" in self._config):
             tessdata_path = os.path.abspath('./tessdata')
             os.environ['TESSDATA_PREFIX'] = tessdata_path
             tessdata_dir_config = r'--tessdata-dir "' + tessdata_path + '"'
+            #text = pytesseract.image_to_string(Image.open(self.filename), lang=self._config["language"], config=tessdata_dir_config)
             text = pytesseract.image_to_string(Image.open(self.filename), lang=self._config["language"], config=tessdata_dir_config)
         else:
+            #text = pytesseract.image_to_string(Image.open(self.filename))
             text = pytesseract.image_to_string(Image.open(self.filename))
         os.remove(self.filename)
         return text
